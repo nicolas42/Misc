@@ -1,11 +1,19 @@
-20250116
+Misc
+----------------------------------------
+Miscellaneous code that's not too big.
 
 
-Install and uninstall homebrew
+
+Miscellaneous Notes
+-----------------------------------------------------
+
+Macports doesn't appear to stop pip from working properly although it seems to be a bit slower than brew.
+
+
+How to install and uninstall homebrew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh)"
 
-Going to use macports cause it lets me use pip even though it's slower.
 
 
 To comment a region in Emacs: alt+semicolon
