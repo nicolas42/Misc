@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug C++ Program",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/a.out", // Path to the compiled executable
+            "args": ["~/Downloads"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb",  // Use LLDB for macOS
+            "preLaunchTask": "build"
+        }
+    ]
+}

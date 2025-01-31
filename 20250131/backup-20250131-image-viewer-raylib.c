@@ -1,16 +1,14 @@
 // clang -framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT -framework OpenGL libraylib.a -Iraylib/src ../image-viewer-raylib.c
 // ./a.out <dirr>
 // deep reads a directory for images. 
-// gcc -I /opt/homebrew/Cellar/raylib/5.5/include -L /opt/homebrew/Cellar/raylib/5.5/lib -l raylib main.c
 
-
+#include "raylib.h"
+#include "raymath.h"
 #include <dirent.h>
 #include <string.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "raylib.h"
-#include "raymath.h"
 
 #define MAX_FILES 10000
 #define MAX_FILE_NAME_LENGTH 256
@@ -106,18 +104,18 @@ int load_images_recursively(const char* directory, char images[MAX_FILES][MAX_FI
 int main(int argc, char *argv[]) {
     const int screenWidth = 800;
     const int screenHeight = 600;
-    
+
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(screenWidth, screenHeight, "Image Display");
 
     SetTargetFPS(60);
 
-    // if (argc < 2) {
-    //     fprintf(stderr, "Usage: %s <directory_path>\n", argv[0]);
-    //     return 1;
-    // }
-    // char *directory = argv[1];  // Directory path passed as the first argument
-    const char directory[] = "/Users/nicolas/Downloads";  // Current directory for simplicity
+    if (argc < 2) {
+        fprintf(stderr, "Usage: %s <directory_path>\n", argv[0]);
+        return 1;
+    }
+    char *directory = argv[1];  // Directory path passed as the first argument
+    // char directory[] = ".";  // Current directory for simplicity
 
 
     char images[MAX_FILES][MAX_FILE_NAME_LENGTH];

@@ -1,14 +1,13 @@
 // clang -framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT -framework OpenGL libraylib.a -Iraylib/src ../image-viewer-raylib.c
 // ./a.out <dirr>
 // deep reads a directory for images. 
-// gcc -I /opt/homebrew/Cellar/raylib/5.5/include -L /opt/homebrew/Cellar/raylib/5.5/lib -l raylib main.c
-
 
 #include <dirent.h>
 #include <string.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "raylib.h"
 #include "raymath.h"
 
@@ -117,7 +116,7 @@ int main(int argc, char *argv[]) {
     //     return 1;
     // }
     // char *directory = argv[1];  // Directory path passed as the first argument
-    const char directory[] = "/Users/nicolas/Downloads";  // Current directory for simplicity
+    char directory[] = "/Users/nicolas/Downloads";  // Current directory for simplicity
 
 
     char images[MAX_FILES][MAX_FILE_NAME_LENGTH];

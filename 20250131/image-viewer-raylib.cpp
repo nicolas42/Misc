@@ -1,16 +1,22 @@
 // clang -framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT -framework OpenGL libraylib.a -Iraylib/src ../image-viewer-raylib.c
 // ./a.out <dirr>
 // deep reads a directory for images. 
-// gcc -I /opt/homebrew/Cellar/raylib/5.5/include -L /opt/homebrew/Cellar/raylib/5.5/lib -l raylib main.c
 
-
+extern "C" {
 #include <dirent.h>
 #include <string.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+}
+
 #include "raylib.h"
 #include "raymath.h"
+
+#include <iostream>
+#include <vector>
+#include <string>
+
 
 #define MAX_FILES 10000
 #define MAX_FILE_NAME_LENGTH 256
@@ -58,7 +64,7 @@ bool is_directory(const char *path) {
 }
 
 // Recursive function to load images from directories
-int load_images_recursively(const char* directory, char images[MAX_FILES][MAX_FILE_NAME_LENGTH], int index) {
+int load_images_recursively(const char* directory, std::vector<std::string> images, int index) {
     DIR *dir;
     struct dirent *ent;
     char path[MAX_PATH_LENGTH];
@@ -74,8 +80,7 @@ int load_images_recursively(const char* directory, char images[MAX_FILES][MAX_FI
             snprintf(path, sizeof(path), "%s/%s", directory, ent->d_name);
             
             if (!is_directory(path) && is_image_file(ent->d_name)) {
-                snprintf(images[index], MAX_FILE_NAME_LENGTH, "%s", path);
-                index++;
+	      images.push_back(path);
             }
         }
     }
@@ -106,7 +111,7 @@ int load_images_recursively(const char* directory, char images[MAX_FILES][MAX_FI
 int main(int argc, char *argv[]) {
     const int screenWidth = 800;
     const int screenHeight = 600;
-    
+
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(screenWidth, screenHeight, "Image Display");
 
@@ -117,10 +122,11 @@ int main(int argc, char *argv[]) {
     //     return 1;
     // }
     // char *directory = argv[1];  // Directory path passed as the first argument
-    const char directory[] = "/Users/nicolas/Downloads";  // Current directory for simplicity
+    char directory[] = "/Users/nicolas/Downloads";  // Current directory for simplicity
 
-
-    char images[MAX_FILES][MAX_FILE_NAME_LENGTH];
+    
+    // char images[MAX_FILES][MAX_FILE_NAME_LENGTH];
+    std::vector<std::string> images;
     int imageCount = load_images_recursively(directory, images, 0);
     if (imageCount == 0) {
         fprintf(stderr, "No images found in the directory or its subdirectories.\n");
@@ -128,10 +134,12 @@ int main(int argc, char *argv[]) {
     }
 
     int currentImageIndex = 0;
-    Image img = LoadImage(images[currentImageIndex]);
+
+
+    Image img = LoadImage(images[currentImageIndex].c_str());
     Texture2D texture = LoadTextureFromImage(img);
     UnloadImage(img); // Unload image data after loading into texture
-    SetWindowTitle(images[currentImageIndex]);
+    SetWindowTitle(images[currentImageIndex].c_str());
 
     bool fullSize = true;
     float zoomScale = 1.0f;
@@ -157,7 +165,7 @@ int main(int argc, char *argv[]) {
                     keyRepeatTimer = KEY_REPEAT_INTERVAL;
                     currentImageIndex = (currentImageIndex + 1) % imageCount;
                     UnloadTexture(texture);
-                    img = LoadImage(images[currentImageIndex]);
+                    img = LoadImage(images[currentImageIndex].c_str());
                     texture = LoadTextureFromImage(img);
                     UnloadImage(img);
                     zoomScale = 1.0f;
@@ -165,7 +173,7 @@ int main(int argc, char *argv[]) {
                 }
                 
             }
-            SetWindowTitle(images[currentImageIndex]);
+            SetWindowTitle(images[currentImageIndex].c_str());
             
         } else if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_K)) {
             if (!keyRepeatStarted) {
@@ -179,14 +187,14 @@ int main(int argc, char *argv[]) {
                     keyRepeatTimer = KEY_REPEAT_INTERVAL;
                     currentImageIndex = (currentImageIndex - 1 + imageCount) % imageCount;
                     UnloadTexture(texture);
-                    img = LoadImage(images[currentImageIndex]);
+                    img = LoadImage(images[currentImageIndex].c_str());
                     texture = LoadTextureFromImage(img);
                     UnloadImage(img);
                     zoomScale = 1.0f;
                     imageOffset.x = imageOffset.y = 0;
                 }
             }
-            SetWindowTitle(images[currentImageIndex]);
+            SetWindowTitle(images[currentImageIndex].c_str());
         } else {
             // Reset repeat conditions when keys are released
             keyRepeatStarted = false;
@@ -201,7 +209,7 @@ int main(int argc, char *argv[]) {
         if (IsKeyPressed(KEY_RIGHT) || IsKeyPressed(KEY_J)) {
             currentImageIndex = (currentImageIndex + 1) % imageCount;
             UnloadTexture(texture);
-            img = LoadImage(images[currentImageIndex]);
+            img = LoadImage(images[currentImageIndex].c_str());
             texture = LoadTextureFromImage(img);
             UnloadImage(img);
             zoomScale = 1.0f;
@@ -210,7 +218,7 @@ int main(int argc, char *argv[]) {
         if (IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_K)) {
             currentImageIndex = (currentImageIndex - 1 + imageCount) % imageCount;
             UnloadTexture(texture);
-            img = LoadImage(images[currentImageIndex]);
+            img = LoadImage(images[currentImageIndex].c_str());
             texture = LoadTextureFromImage(img);
             UnloadImage(img);
             zoomScale = 1.0f;

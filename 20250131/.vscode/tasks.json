@@ -1,0 +1,30 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "clang++",
+            "args": [
+                "-std=c++11",
+                "-g",
+                "-framework", "CoreVideo",
+                "-framework", "IOKit",
+                "-framework", "Cocoa",
+                "-framework", "GLUT",
+                "-framework", "OpenGL",
+                "raylib/libraylib.a",
+                "-I","raylib/raylib/src",
+                "image-viewer-raylib.cpp",
+                "-o", "a.out"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        }
+    ]
+}
