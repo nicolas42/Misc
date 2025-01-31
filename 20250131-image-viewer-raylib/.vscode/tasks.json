@@ -1,0 +1,24 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "-g",
+                "-I", "/opt/homebrew/Cellar/raylib/5.5/include",
+                "-L", "/opt/homebrew/Cellar/raylib/5.5/lib",
+                "-l", "raylib",
+                "main.c",
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        }
+    ]
+}
